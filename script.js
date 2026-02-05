@@ -67,3 +67,30 @@ function copiarResultado() {
       document.getElementById("alerta").textContent = "⚠️ Error al copiar resultados.";
     });
 }
+
+// 🔹 Nuevas funciones para borrar/copiar listas y actualizar contadores
+function borrarLista(idTextarea, idContador) {
+  document.getElementById(idTextarea).value = "";
+  document.getElementById(idContador).textContent = "0";
+}
+
+function copiarLista(idTextarea) {
+  let texto = document.getElementById(idTextarea).value.trim();
+  if (texto === "") {
+    document.getElementById("alerta").textContent = "⚠️ No hay nada que copiar.";
+    return;
+  }
+  navigator.clipboard.writeText(texto)
+    .then(() => {
+      document.getElementById("alerta").textContent = "📋 Lista copiada al portapapeles.";
+    })
+    .catch(() => {
+      document.getElementById("alerta").textContent = "⚠️ Error al copiar la lista.";
+    });
+}
+
+function actualizarContador(idTextarea, idContador) {
+  let lista = limpiarLista(document.getElementById(idTextarea).value);
+  document.getElementById(idContador).textContent = lista.length;
+}
+
