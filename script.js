@@ -132,4 +132,9 @@ window.onload = function() {
     body.classList.add("bg-dark", "text-light");
     btnTema.classList.remove("btn-outline-dark");
     btnTema.classList.add("btn-outline-light");
-    btn
+    btnTema.textContent = "🌗 Modo claro";
+  } else {
+    body.classList.remove("bg-dark", "text-light");
+    body.classList.add("bg-light");
+    btnTema.classList.remove("btn-outline-light");
+    btnTema.classList.add("btn-outline-dark
