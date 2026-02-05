@@ -134,7 +134,4 @@ window.onload = function() {
     btnTema.classList.add("btn-outline-light");
     btnTema.textContent = "🌗 Modo claro";
   } else {
-    body.classList.remove("bg-dark", "text-light");
-    body.classList.add("bg-light");
-    btnTema.classList.remove("btn-outline-light");
-    btnTema.classList.add("btn-outline-dark
+    body.classList.remove("bg-dark",
