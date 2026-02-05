@@ -1,11 +1,12 @@
 let resultadoGlobal = [];
 
+// 🔹 Limpieza básica de listas
 function limpiarLista(texto) {
-  // acepta comas o saltos de línea
   let lista = texto.split(/[\n,]+/);
   return [...new Set(lista.map(u => u.trim()))].filter(u => u !== "");
 }
 
+// 🔹 Comparar listas
 function comparar() {
   let seguidos = limpiarLista(document.getElementById("seguidos").value);
   let seguidores = limpiarLista(document.getElementById("seguidores").value);
@@ -42,6 +43,7 @@ function comparar() {
   }
 }
 
+// 🔹 Exportar resultados
 function exportarResultado() {
   if (resultadoGlobal.length === 0) {
     document.getElementById("alerta").textContent = "⚠️ No hay resultados para exportar.";
@@ -54,6 +56,7 @@ function exportarResultado() {
   link.click();
 }
 
+// 🔹 Copiar resultados
 function copiarResultado() {
   if (resultadoGlobal.length === 0) {
     document.getElementById("alerta").textContent = "⚠️ No hay resultados para copiar.";
@@ -68,12 +71,13 @@ function copiarResultado() {
     });
 }
 
-// 🔹 Nuevas funciones para borrar/copiar listas y actualizar contadores
+// 🔹 Borrar lista
 function borrarLista(idTextarea, idContador) {
   document.getElementById(idTextarea).value = "";
   document.getElementById(idContador).textContent = "0";
 }
 
+// 🔹 Copiar lista
 function copiarLista(idTextarea) {
   let texto = document.getElementById(idTextarea).value.trim();
   if (texto === "") {
@@ -89,8 +93,43 @@ function copiarLista(idTextarea) {
     });
 }
 
+// 🔹 Actualizar contador dinámico
 function actualizarContador(idTextarea, idContador) {
   let lista = limpiarLista(document.getElementById(idTextarea).value);
   document.getElementById(idContador).textContent = lista.length;
 }
 
+// 🔹 Cambiar tema con persistencia en localStorage
+function cambiarTema() {
+  let body = document.getElementById("body");
+  let btnTema = document.getElementById("btnTema");
+
+  if (body.classList.contains("bg-light")) {
+    body.classList.remove("bg-light");
+    body.classList.add("bg-dark", "text-light");
+    btnTema.classList.remove("btn-outline-dark");
+    btnTema.classList.add("btn-outline-light");
+    btnTema.textContent = "🌗 Modo claro";
+    localStorage.setItem("tema", "oscuro");
+  } else {
+    body.classList.remove("bg-dark", "text-light");
+    body.classList.add("bg-light");
+    btnTema.classList.remove("btn-outline-light");
+    btnTema.classList.add("btn-outline-dark");
+    btnTema.textContent = "🌗 Modo oscuro";
+    localStorage.setItem("tema", "claro");
+  }
+}
+
+// 🔹 Al cargar la página, aplicar tema guardado
+window.onload = function() {
+  let temaGuardado = localStorage.getItem("tema");
+  let body = document.getElementById("body");
+  let btnTema = document.getElementById("btnTema");
+
+  if (temaGuardado === "oscuro") {
+    body.classList.remove("bg-light");
+    body.classList.add("bg-dark", "text-light");
+    btnTema.classList.remove("btn-outline-dark");
+    btnTema.classList.add("btn-outline-light");
+    btn
