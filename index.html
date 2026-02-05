@@ -1,1 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Comparador de Seguidores</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Comparador de Seguidores de Instagram</h1>
+
+  <form onsubmit="comparar(); return false;">
+    <label>Usuarios que sigues (separados por coma):</label><br>
+    <textarea id="seguidos" rows="4" cols="50"></textarea><br><br>
+
+    <label>Usuarios que te siguen (separados por coma):</label><br>
+    <textarea id="seguidores" rows="4" cols="50"></textarea><br><br>
+
+    <button type="submit">Comparar</button>
+  </form>
+
+  <h2>No me siguen:</h2>
+  <ul id="resultado"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
