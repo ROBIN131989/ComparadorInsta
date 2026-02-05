@@ -13,27 +13,45 @@
   <div class="container py-4">
     <h1 class="text-center mb-4">Comparador de Seguidores</h1>
 
+    <!-- Usuarios que sigues -->
+    <div class="mb-3">
+      <label class="form-label">Usuarios que sigues (<span id="contadorSeguidos">0</span>):</label>
+      <textarea id="seguidos" class="form-control" rows="6" placeholder="Pega aquí tu lista de seguidos..." oninput="actualizarContador('seguidos','contadorSeguidos')"></textarea>
+      <div class="mt-2">
+        <button type="button" class="btn btn-danger me-2" onclick="borrarLista('seguidos','contadorSeguidos')">🗑️ Borrar</button>
+        <button type="button" class="btn btn-secondary" onclick="copiarLista('seguidos')">📋 Copiar</button>
+      </div>
+    </div>
+
+    <!-- Usuarios que te siguen -->
+    <div class="mb-3">
+      <label class="form-label">Usuarios que te siguen (<span id="contadorSeguidores">0</span>):</label>
+      <textarea id="seguidores" class="form-control" rows="6" placeholder="Pega aquí tu lista de seguidores..." oninput="actualizarContador('seguidores','contadorSeguidores')"></textarea>
+      <div class="mt-2">
+        <button type="button" class="btn btn-danger me-2" onclick="borrarLista('seguidores','contadorSeguidores')">🗑️ Borrar</button>
+        <button type="button" class="btn btn-secondary" onclick="copiarLista('seguidores')">📋 Copiar</button>
+      </div>
+    </div>
+
+    <!-- Botones principales -->
     <form onsubmit="comparar(); return false;" class="mb-3">
-      <div class="mb-3">
-        <label class="form-label">Usuarios que sigues:</label>
-        <textarea id="seguidos" class="form-control" rows="6" placeholder="Pega aquí tu lista de seguidos..."></textarea>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Usuarios que te siguen:</label>
-        <textarea id="seguidores" class="form-control" rows="6" placeholder="Pega aquí tu lista de seguidores..."></textarea>
-      </div>
-
       <button type="submit" class="btn btn-primary me-2">Comparar</button>
       <button type="button" class="btn btn-success me-2" onclick="exportarResultado()">Exportar</button>
-      <button type="button" class="btn btn-secondary" onclick="copiarResultado()">Copiar</button>
+      <button type="button" class="btn btn-secondary" onclick="copiarResultado()">Copiar resultados</button>
     </form>
 
+    <!-- Alertas -->
     <div id="alerta" class="text-danger fw-bold mb-3"></div>
 
+    <!-- Resultados -->
     <h2>No me siguen (<span id="contador">0</span>):</h2>
     <ul id="resultado" class="list-group" style="max-height:300px; overflow-y:auto;"></ul>
   </div>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+</html>
 
   <!-- Script -->
   <script src="script.js"></script>
