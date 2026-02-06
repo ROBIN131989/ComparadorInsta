@@ -131,3 +131,4 @@ function cambiarTema() {
   btnTema.classList.toggle("btn-outline-light");
   btnTema.classList.toggle("btn-outline-dark");
 }
+
