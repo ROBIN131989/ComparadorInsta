@@ -1,36 +1,52 @@
 let resultadoGlobal = [];
 
-// 🔹 Limpieza básica de listas
+// 🔹 Limpieza REAL para listas de Instagram
 function limpiarLista(texto) {
-  let lista = texto.split(/[\n,]+/);
-  return [...new Set(lista.map(u => u.trim()))].filter(u => u !== "");
+  return [...new Set(
+    texto
+      .split(/\n|,|;/) // separa por saltos, comas o ;
+      .map(u =>
+        u
+          .replace(/["']/g,"") // quita comillas
+          .replace("@","") // quita @
+          .trim()
+          .toLowerCase()
+      )
+      .filter(u => u !== "")
+  )];
 }
 
 // 🔹 Comparar listas
 function comparar() {
-  let seguidos = limpiarLista(document.getElementById("seguidos").value);
-  let seguidores = limpiarLista(document.getElementById("seguidores").value);
+
+  let seguidosTexto = document.getElementById("seguidos").value;
+  let seguidoresTexto = document.getElementById("seguidores").value;
+
+  let seguidos = limpiarLista(seguidosTexto);
+  let seguidores = limpiarLista(seguidoresTexto);
 
   if (seguidos.length === 0 || seguidores.length === 0) {
     document.getElementById("alerta").textContent = "⚠️ Debes pegar ambas listas.";
     return;
-  } else {
-    document.getElementById("alerta").textContent = "";
   }
 
-  // Normalización a minúsculas
-  let seguidoresSet = new Set(seguidores.map(s => s.toLowerCase()));
-  let noMeSiguen = seguidos.filter(s => !seguidoresSet.has(s.toLowerCase()));
+  let seguidoresSet = new Set(seguidores);
+
+  let noMeSiguen = seguidos.filter(s => !seguidoresSet.has(s));
 
   resultadoGlobal = noMeSiguen;
+
   mostrarResultados(noMeSiguen);
 }
 
 // 🔹 Mostrar resultados
 function mostrarResultados(listaUsuarios) {
+
   document.getElementById("contador").textContent = listaUsuarios.length;
+
   let lista = document.getElementById("resultado");
   lista.innerHTML = "";
+
   listaUsuarios.forEach(u => {
     let li = document.createElement("li");
     li.textContent = u;
@@ -40,15 +56,18 @@ function mostrarResultados(listaUsuarios) {
 
   if (listaUsuarios.length === 0) {
     document.getElementById("alerta").textContent = "✅ Todos los usuarios que sigues también te siguen.";
+  } else {
+    document.getElementById("alerta").textContent = "";
   }
 }
 
 // 🔹 Exportar resultados
 function exportarResultado() {
   if (resultadoGlobal.length === 0) {
-    document.getElementById("alerta").textContent = "⚠️ No hay resultados para exportar.";
+    document.getElementById("alerta").textContent = "⚠️ No hay resultados.";
     return;
   }
+
   let blob = new Blob([resultadoGlobal.join("\n")], { type: "text/plain" });
   let link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
@@ -58,17 +77,7 @@ function exportarResultado() {
 
 // 🔹 Copiar resultados
 function copiarResultado() {
-  if (resultadoGlobal.length === 0) {
-    document.getElementById("alerta").textContent = "⚠️ No hay resultados para copiar.";
-    return;
-  }
-  navigator.clipboard.writeText(resultadoGlobal.join("\n"))
-    .then(() => {
-      document.getElementById("alerta").textContent = "📋 Resultados copiados al portapapeles.";
-    })
-    .catch(() => {
-      document.getElementById("alerta").textContent = "⚠️ Error al copiar resultados.";
-    });
+  navigator.clipboard.writeText(resultadoGlobal.join("\n"));
 }
 
 // 🔹 Borrar lista
@@ -79,69 +88,47 @@ function borrarLista(idTextarea, idContador) {
 
 // 🔹 Copiar lista
 function copiarLista(idTextarea) {
-  let texto = document.getElementById(idTextarea).value.trim();
-  if (texto === "") {
-    document.getElementById("alerta").textContent = "⚠️ No hay nada que copiar.";
-    return;
-  }
-  navigator.clipboard.writeText(texto)
-    .then(() => {
-      document.getElementById("alerta").textContent = "📋 Lista copiada al portapapeles.";
-    })
-    .catch(() => {
-      document.getElementById("alerta").textContent = "⚠️ Error al copiar la lista.";
-    });
+  let texto = document.getElementById(idTextarea).value;
+  navigator.clipboard.writeText(texto);
 }
 
-// 🔹 Actualizar contador dinámico
+// 🔹 Actualizar contador
 function actualizarContador(idTextarea, idContador) {
   let lista = limpiarLista(document.getElementById(idTextarea).value);
   document.getElementById(idContador).textContent = lista.length;
 }
 
-// 🔹 Ordenar resultados alfabéticamente
+// 🔹 Ordenar
 function ordenarResultados() {
-  if (resultadoGlobal.length === 0) {
-    document.getElementById("alerta").textContent = "⚠️ No hay resultados para ordenar.";
-    return;
-  }
-  resultadoGlobal.sort((a, b) => a.localeCompare(b));
+  resultadoGlobal.sort();
   mostrarResultados(resultadoGlobal);
 }
 
-// 🔹 Buscar dentro de resultados
+// 🔹 Buscar
 function buscarResultado() {
   let query = document.getElementById("buscador").value.toLowerCase();
-  let filtrados = resultadoGlobal.filter(u => u.toLowerCase().includes(query));
+  let filtrados = resultadoGlobal.filter(u => u.includes(query));
   mostrarResultados(filtrados);
 }
 
-// 🔹 Cambiar tema con persistencia
+// 🔹 Tema
 function cambiarTema() {
+
   let body = document.getElementById("body");
   let contenedor = document.getElementById("contenedor");
   let btnTema = document.getElementById("btnTema");
 
-  if (body.classList.contains("bg-light")) {
-    body.classList.remove("bg-light", "text-dark");
-    body.classList.add("bg-dark", "text-light");
+  body.classList.toggle("bg-dark");
+  body.classList.toggle("text-light");
+  body.classList.toggle("bg-light");
+  body.classList.toggle("text-dark");
 
-    contenedor.classList.remove("bg-white", "text-dark");
-    contenedor.classList.add("bg-secondary", "text-light");
+  contenedor.classList.toggle("bg-secondary");
+  contenedor.classList.toggle("text-light");
+  contenedor.classList.toggle("bg-white");
+  contenedor.classList.toggle("text-dark");
 
-    btnTema.classList.remove("btn-outline-dark");
-    btnTema.classList.add("btn-outline-light");
-    btnTema.textContent = "☀️ Modo claro";
-  } else {
-    body.classList.remove("bg-dark", "text-light");
-    body.classList.add("bg-light", "text-dark");
-
-    contenedor.classList.remove("bg-secondary", "text-light");
-    contenedor.classList.add("bg-white", "text-dark");
-
-    btnTema.classList.remove("btn-outline-light");
-    btnTema.classList.add("btn-outline-dark");
-    btnTema.textContent = "🌗 Modo oscuro";
-  }
+  btnTema.classList.toggle("btn-outline-light");
+  btnTema.classList.toggle("btn-outline-dark");
 }
 
