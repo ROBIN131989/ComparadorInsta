@@ -102,36 +102,21 @@ function actualizarContador(idTextarea, idContador) {
 // 🔹 Cambiar tema con persistencia en localStorage
 function cambiarTema() {
   let body = document.getElementById("body");
+  let contenedor = document.getElementById("contenedor");
   let btnTema = document.getElementById("btnTema");
 
   if (body.classList.contains("bg-light")) {
-    body.classList.remove("bg-light");
+    body.classList.remove("bg-light", "text-dark");
     body.classList.add("bg-dark", "text-light");
+    contenedor.classList.remove("bg-white", "text-dark");
+    contenedor.classList.add("bg-secondary", "text-light");
     btnTema.classList.remove("btn-outline-dark");
     btnTema.classList.add("btn-outline-light");
     btnTema.textContent = "🌗 Modo claro";
     localStorage.setItem("tema", "oscuro");
   } else {
     body.classList.remove("bg-dark", "text-light");
-    body.classList.add("bg-light");
-    btnTema.classList.remove("btn-outline-light");
-    btnTema.classList.add("btn-outline-dark");
-    btnTema.textContent = "🌗 Modo oscuro";
-    localStorage.setItem("tema", "claro");
-  }
-}
-
-// 🔹 Al cargar la página, aplicar tema guardado
-window.onload = function() {
-  let temaGuardado = localStorage.getItem("tema");
-  let body = document.getElementById("body");
-  let btnTema = document.getElementById("btnTema");
-
-  if (temaGuardado === "oscuro") {
-    body.classList.remove("bg-light");
-    body.classList.add("bg-dark", "text-light");
-    btnTema.classList.remove("btn-outline-dark");
-    btnTema.classList.add("btn-outline-light");
-    btnTema.textContent = "🌗 Modo claro";
-  } else {
-    body.classList.remove("bg-dark",
+    body.classList.add("bg-light", "text-dark");
+    contenedor.classList.remove("bg-secondary", "text-light");
+    contenedor.classList.add("bg-white", "text-dark");
+    btnTema.class
