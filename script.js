@@ -18,16 +18,10 @@ function comparar() {
     document.getElementById("alerta").textContent = "";
   }
 
-  if (seguidos.length > 20000 || seguidores.length > 20000) {
-    document.getElementById("alerta").textContent = "⚠️ La lista es demasiado grande (máx. 20,000).";
-    return;
-  }
-
   let seguidoresSet = new Set(seguidores);
   let noMeSiguen = seguidos.filter(s => !seguidoresSet.has(s));
 
   resultadoGlobal = noMeSiguen;
-
   mostrarResultados(noMeSiguen);
 }
 
@@ -121,7 +115,17 @@ function buscarResultado() {
   mostrarResultados(filtrados);
 }
 
-// 🔹 Cambiar tema con persistencia en localStorage
+// 🔹 Cambiar tema con persistencia
 function cambiarTema() {
   let body = document.getElementById("body");
-  let contenedor = document.getElementById("
+  let contenedor = document.getElementById("contenedor");
+  let btnTema = document.getElementById("btnTema");
+
+  if (body.classList.contains("bg-light")) {
+    body.classList.remove("bg-light", "text-dark");
+    body.classList.add("bg-dark", "text-light");
+
+    contenedor.classList.remove("bg-white", "text-dark");
+    contenedor.classList.add("bg-secondary", "text-light");
+
+    btnTema.classList.remove("btn-outline
