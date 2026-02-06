@@ -18,8 +18,9 @@ function comparar() {
     document.getElementById("alerta").textContent = "";
   }
 
-  let seguidoresSet = new Set(seguidores);
-  let noMeSiguen = seguidos.filter(s => !seguidoresSet.has(s));
+  // Normalización a minúsculas
+  let seguidoresSet = new Set(seguidores.map(s => s.toLowerCase()));
+  let noMeSiguen = seguidos.filter(s => !seguidoresSet.has(s.toLowerCase()));
 
   resultadoGlobal = noMeSiguen;
   mostrarResultados(noMeSiguen);
@@ -121,11 +122,4 @@ function cambiarTema() {
   let contenedor = document.getElementById("contenedor");
   let btnTema = document.getElementById("btnTema");
 
-  if (body.classList.contains("bg-light")) {
-    body.classList.remove("bg-light", "text-dark");
-    body.classList.add("bg-dark", "text-light");
-
-    contenedor.classList.remove("bg-white", "text-dark");
-    contenedor.classList.add("bg-secondary", "text-light");
-
-    btnTema.classList.remove("btn-outline
+  if (body
