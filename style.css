@@ -13,14 +13,11 @@ textarea {
 }
 
 button {
-  background-color: #3498db;
-  color: white;
   padding: 10px;
-  border: none;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #2980b9;
+  opacity: 0.9;
 }
 
