@@ -28,17 +28,22 @@ function comparar() {
 
   resultadoGlobal = noMeSiguen;
 
-  document.getElementById("contador").textContent = noMeSiguen.length;
+  mostrarResultados(noMeSiguen);
+}
+
+// 🔹 Mostrar resultados
+function mostrarResultados(listaUsuarios) {
+  document.getElementById("contador").textContent = listaUsuarios.length;
   let lista = document.getElementById("resultado");
   lista.innerHTML = "";
-  noMeSiguen.forEach(u => {
+  listaUsuarios.forEach(u => {
     let li = document.createElement("li");
     li.textContent = u;
     li.className = "list-group-item";
     lista.appendChild(li);
   });
 
-  if (noMeSiguen.length === 0) {
+  if (listaUsuarios.length === 0) {
     document.getElementById("alerta").textContent = "✅ Todos los usuarios que sigues también te siguen.";
   }
 }
@@ -99,24 +104,17 @@ function actualizarContador(idTextarea, idContador) {
   document.getElementById(idContador).textContent = lista.length;
 }
 
-// 🔹 Cambiar tema con persistencia en localStorage
-function cambiarTema() {
-  let body = document.getElementById("body");
-  let contenedor = document.getElementById("contenedor");
-  let btnTema = document.getElementById("btnTema");
+// 🔹 Ordenar resultados alfabéticamente
+function ordenarResultados() {
+  if (resultadoGlobal.length === 0) {
+    document.getElementById("alerta").textContent = "⚠️ No hay resultados para ordenar.";
+    return;
+  }
+  resultadoGlobal.sort((a, b) => a.localeCompare(b));
+  mostrarResultados(resultadoGlobal);
+}
 
-  if (body.classList.contains("bg-light")) {
-    body.classList.remove("bg-light", "text-dark");
-    body.classList.add("bg-dark", "text-light");
-    contenedor.classList.remove("bg-white", "text-dark");
-    contenedor.classList.add("bg-secondary", "text-light");
-    btnTema.classList.remove("btn-outline-dark");
-    btnTema.classList.add("btn-outline-light");
-    btnTema.textContent = "🌗 Modo claro";
-    localStorage.setItem("tema", "oscuro");
-  } else {
-    body.classList.remove("bg-dark", "text-light");
-    body.classList.add("bg-light", "text-dark");
-    contenedor.classList.remove("bg-secondary", "text-light");
-    contenedor.classList.add("bg-white", "text-dark");
-    btnTema.class
+// 🔹 Buscar dentro de resultados
+function buscarResultado() {
+  let query = document.getElementById("buscador").value.toLowerCase();
+  let filtr
