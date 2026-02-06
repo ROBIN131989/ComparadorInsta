@@ -19,5 +19,21 @@ button {
 
 button:hover {
   opacity: 0.9;
-}  
+}
 
+/* 🔥 NUEVO — LISTAS LADO A LADO EN PC */
+.listas-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+@media (min-width: 768px) {
+  .listas-container {
+    flex-direction: row;
+  }
+
+  .lista {
+    width: 50%;
+  }
+}
