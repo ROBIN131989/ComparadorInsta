@@ -1,172 +1,111 @@
 let resultadoGlobal = [];
 
-// 🔹 Guardar datos automáticamente
-function guardarDatos() {
-
-  localStorage.setItem("seguidos", document.getElementById("seguidos").value);
-  localStorage.setItem("seguidores", document.getElementById("seguidores").value);
-  localStorage.setItem("resultadoGlobal", JSON.stringify(resultadoGlobal));
-
+function guardarDatos(){
+localStorage.setItem("seguidos",seguidos.value);
+localStorage.setItem("seguidores",seguidores.value);
+localStorage.setItem("resultadoGlobal",JSON.stringify(resultadoGlobal));
 }
 
-// 🔹 Cargar datos al abrir la página
-function cargarDatos() {
+function cargarDatos(){
+let s=localStorage.getItem("seguidos");
+let f=localStorage.getItem("seguidores");
+let r=localStorage.getItem("resultadoGlobal");
 
-  let seguidos = localStorage.getItem("seguidos");
-  let seguidores = localStorage.getItem("seguidores");
-  let resultado = localStorage.getItem("resultadoGlobal");
-
-  if (seguidos) {
-    document.getElementById("seguidos").value = seguidos;
-    actualizarContador("seguidos","contadorSeguidos");
-  }
-
-  if (seguidores) {
-    document.getElementById("seguidores").value = seguidores;
-    actualizarContador("seguidores","contadorSeguidores");
-  }
-
-  if (resultado) {
-    resultadoGlobal = JSON.parse(resultado);
-    mostrarResultados(resultadoGlobal);
-  }
+if(s){seguidos.value=s;actualizarContador("seguidos","contadorSeguidos")}
+if(f){seguidores.value=f;actualizarContador("seguidores","contadorSeguidores")}
+if(r){resultadoGlobal=JSON.parse(r);mostrarResultados(resultadoGlobal)}
 }
 
-// 🔹 Limpieza PRO
-function limpiarLista(texto) {
-  return [...new Set(
-    texto
-      .split(/\n|,|;/)
-      .map(u =>
-        u
-          .replace(/["']/g,"")
-          .replace("@","")
-          .trim()
-          .toLowerCase()
-      )
-      .filter(u => u !== "")
-  )];
+function limpiarLista(texto){
+return [...new Set(texto.split(/\n|,|;/)
+.map(u=>u.replace(/["']/g,"").replace("@","").trim().toLowerCase())
+.filter(u=>u!==""))];
 }
 
-// 🔹 Comparar listas
-function comparar() {
+function comparar(){
+let seg=limpiarLista(seguidos.value);
+let segd=limpiarLista(seguidores.value);
 
-  let seguidos = limpiarLista(document.getElementById("seguidos").value);
-  let seguidores = limpiarLista(document.getElementById("seguidores").value);
-
-  if (seguidos.length === 0 || seguidores.length === 0) {
-    document.getElementById("alerta").textContent = "⚠️ Debes pegar ambas listas.";
-    return;
-  }
-
-  let seguidoresSet = new Set(seguidores);
-  let noMeSiguen = seguidos.filter(s => !seguidoresSet.has(s));
-
-  resultadoGlobal = noMeSiguen;
-
-  mostrarResultados(noMeSiguen);
-
-  guardarDatos();
-
-  // ⭐ BAJAR AUTOMÁTICAMENTE A RESULTADOS
-  document.getElementById("resultado")
-    .scrollIntoView({ behavior: "smooth" });
+if(seg.length===0||segd.length===0){
+alerta.textContent="⚠️ Debes pegar ambas listas.";
+return;
 }
 
-// 🔹 Mostrar resultados
-function mostrarResultados(listaUsuarios) {
+let set=new Set(segd);
+resultadoGlobal=seg.filter(s=>!set.has(s));
 
-  document.getElementById("contador").textContent = listaUsuarios.length;
+mostrarResultados(resultadoGlobal);
+guardarDatos();
 
-  let lista = document.getElementById("resultado");
-  lista.innerHTML = "";
-
-  listaUsuarios.forEach(u => {
-    let li = document.createElement("li");
-    li.textContent = u;
-    li.className = "list-group-item";
-    lista.appendChild(li);
-  });
-
-  if (listaUsuarios.length === 0) {
-    document.getElementById("alerta").textContent = "✅ Todos los usuarios que sigues también te siguen.";
-  } else {
-    document.getElementById("alerta").textContent = "";
-  }
+resultado.scrollIntoView({behavior:"smooth"});
 }
 
-// 🔹 Exportar resultados
-function exportarResultado() {
-  if (resultadoGlobal.length === 0) return;
-
-  let blob = new Blob([resultadoGlobal.join("\n")], { type: "text/plain" });
-  let link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "no_me_siguen.txt";
-  link.click();
+function mostrarResultados(lista){
+contador.textContent=lista.length;
+resultado.innerHTML="";
+lista.forEach(u=>{
+let li=document.createElement("li");
+li.textContent=u;
+li.className="list-group-item";
+resultado.appendChild(li);
+});
 }
 
-// 🔹 Copiar resultados
-function copiarResultado() {
-  navigator.clipboard.writeText(resultadoGlobal.join("\n"));
+function exportarResultado(){
+if(resultadoGlobal.length===0)return;
+let blob=new Blob([resultadoGlobal.join("\n")]);
+let link=document.createElement("a");
+link.href=URL.createObjectURL(blob);
+link.download="no_me_siguen.txt";
+link.click();
 }
 
-// 🔹 Borrar lista
-function borrarLista(idTextarea, idContador) {
-  document.getElementById(idTextarea).value = "";
-  document.getElementById(idContador).textContent = "0";
-  guardarDatos();
+function copiarResultado(){
+navigator.clipboard.writeText(resultadoGlobal.join("\n"));
 }
 
-// 🔹 Copiar lista
-function copiarLista(idTextarea) {
-  let texto = document.getElementById(idTextarea).value;
-  navigator.clipboard.writeText(texto);
+function actualizarContador(id,idc){
+let lista=limpiarLista(document.getElementById(id).value);
+document.getElementById(idc).textContent=lista.length;
+guardarDatos();
 }
 
-// 🔹 Actualizar contador
-function actualizarContador(idTextarea, idContador) {
-  let lista = limpiarLista(document.getElementById(idTextarea).value);
-  document.getElementById(idContador).textContent = lista.length;
-  guardarDatos();
+function ordenarResultados(){
+resultadoGlobal.sort();
+mostrarResultados(resultadoGlobal);
+guardarDatos();
 }
 
-// 🔹 Ordenar
-function ordenarResultados() {
-  resultadoGlobal.sort();
-  mostrarResultados(resultadoGlobal);
-  guardarDatos();
+function buscarResultado(){
+let q=buscador.value.toLowerCase();
+mostrarResultados(resultadoGlobal.filter(u=>u.includes(q)));
 }
 
-// 🔹 Buscar
-function buscarResultado() {
-  let query = document.getElementById("buscador").value.toLowerCase();
-  let filtrados = resultadoGlobal.filter(u => u.includes(query));
-  mostrarResultados(filtrados);
+function borrarResultados(){
+resultadoGlobal=[];
+resultado.innerHTML="";
+contador.textContent="0";
+localStorage.removeItem("resultadoGlobal");
 }
 
-// 🔹 Tema
-function cambiarTema() {
-
-  let body = document.getElementById("body");
-  let contenedor = document.getElementById("contenedor");
-  let btnTema = document.getElementById("btnTema");
-
-  body.classList.toggle("bg-dark");
-  body.classList.toggle("text-light");
-  body.classList.toggle("bg-light");
-  body.classList.toggle("text-dark");
-
-  contenedor.classList.toggle("bg-secondary");
-  contenedor.classList.toggle("text-light");
-  contenedor.classList.toggle("bg-white");
-  contenedor.classList.toggle("text-dark");
-
-  btnTema.classList.toggle("btn-outline-light");
-  btnTema.classList.toggle("btn-outline-dark");
+function borrarTodo(){
+localStorage.clear();
+seguidos.value="";
+seguidores.value="";
+contadorSeguidos.textContent="0";
+contadorSeguidores.textContent="0";
+resultado.innerHTML="";
+contador.textContent="0";
+resultadoGlobal=[];
 }
 
-// 🔹 Cargar datos al iniciar
-document.addEventListener("DOMContentLoaded", cargarDatos);
+function cambiarTema(){
+body.classList.toggle("bg-dark");
+body.classList.toggle("text-light");
+body.classList.toggle("bg-light");
+body.classList.toggle("text-dark");
+}
+
+document.addEventListener("DOMContentLoaded",cargarDatos);
 
 
