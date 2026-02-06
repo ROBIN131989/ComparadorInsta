@@ -1,46 +1,14 @@
 let resultadoGlobal = [];
 
-// 🔹 Guardar datos automáticamente
-function guardarDatos() {
-
-  localStorage.setItem("seguidos", document.getElementById("seguidos").value);
-  localStorage.setItem("seguidores", document.getElementById("seguidores").value);
-  localStorage.setItem("resultadoGlobal", JSON.stringify(resultadoGlobal));
-
-}
-
-// 🔹 Cargar datos al abrir la página
-function cargarDatos() {
-
-  let seguidos = localStorage.getItem("seguidos");
-  let seguidores = localStorage.getItem("seguidores");
-  let resultado = localStorage.getItem("resultadoGlobal");
-
-  if (seguidos) {
-    document.getElementById("seguidos").value = seguidos;
-    actualizarContador("seguidos","contadorSeguidos");
-  }
-
-  if (seguidores) {
-    document.getElementById("seguidores").value = seguidores;
-    actualizarContador("seguidores","contadorSeguidores");
-  }
-
-  if (resultado) {
-    resultadoGlobal = JSON.parse(resultado);
-    mostrarResultados(resultadoGlobal);
-  }
-}
-
-// 🔹 Limpieza PRO
+// 🔹 Limpieza REAL para listas de Instagram
 function limpiarLista(texto) {
   return [...new Set(
     texto
-      .split(/\n|,|;/)
+      .split(/\n|,|;/) // separa por saltos, comas o ;
       .map(u =>
         u
-          .replace(/["']/g,"")
-          .replace("@","")
+          .replace(/["']/g,"") // quita comillas
+          .replace("@","") // quita @
           .trim()
           .toLowerCase()
       )
@@ -51,8 +19,11 @@ function limpiarLista(texto) {
 // 🔹 Comparar listas
 function comparar() {
 
-  let seguidos = limpiarLista(document.getElementById("seguidos").value);
-  let seguidores = limpiarLista(document.getElementById("seguidores").value);
+  let seguidosTexto = document.getElementById("seguidos").value;
+  let seguidoresTexto = document.getElementById("seguidores").value;
+
+  let seguidos = limpiarLista(seguidosTexto);
+  let seguidores = limpiarLista(seguidoresTexto);
 
   if (seguidos.length === 0 || seguidores.length === 0) {
     document.getElementById("alerta").textContent = "⚠️ Debes pegar ambas listas.";
@@ -60,17 +31,12 @@ function comparar() {
   }
 
   let seguidoresSet = new Set(seguidores);
+
   let noMeSiguen = seguidos.filter(s => !seguidoresSet.has(s));
 
   resultadoGlobal = noMeSiguen;
 
   mostrarResultados(noMeSiguen);
-
-  guardarDatos();
-
-  // ⭐ BAJAR AUTOMÁTICAMENTE A RESULTADOS
-  document.getElementById("resultado")
-    .scrollIntoView({ behavior: "smooth" });
 }
 
 // 🔹 Mostrar resultados
@@ -97,7 +63,10 @@ function mostrarResultados(listaUsuarios) {
 
 // 🔹 Exportar resultados
 function exportarResultado() {
-  if (resultadoGlobal.length === 0) return;
+  if (resultadoGlobal.length === 0) {
+    document.getElementById("alerta").textContent = "⚠️ No hay resultados.";
+    return;
+  }
 
   let blob = new Blob([resultadoGlobal.join("\n")], { type: "text/plain" });
   let link = document.createElement("a");
@@ -115,7 +84,6 @@ function copiarResultado() {
 function borrarLista(idTextarea, idContador) {
   document.getElementById(idTextarea).value = "";
   document.getElementById(idContador).textContent = "0";
-  guardarDatos();
 }
 
 // 🔹 Copiar lista
@@ -128,14 +96,12 @@ function copiarLista(idTextarea) {
 function actualizarContador(idTextarea, idContador) {
   let lista = limpiarLista(document.getElementById(idTextarea).value);
   document.getElementById(idContador).textContent = lista.length;
-  guardarDatos();
 }
 
 // 🔹 Ordenar
 function ordenarResultados() {
   resultadoGlobal.sort();
   mostrarResultados(resultadoGlobal);
-  guardarDatos();
 }
 
 // 🔹 Buscar
@@ -165,8 +131,3 @@ function cambiarTema() {
   btnTema.classList.toggle("btn-outline-light");
   btnTema.classList.toggle("btn-outline-dark");
 }
-
-// 🔹 Cargar datos al iniciar
-document.addEventListener("DOMContentLoaded", cargarDatos);
-
-
