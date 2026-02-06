@@ -122,4 +122,26 @@ function cambiarTema() {
   let contenedor = document.getElementById("contenedor");
   let btnTema = document.getElementById("btnTema");
 
-  if (body
+  if (body.classList.contains("bg-light")) {
+    body.classList.remove("bg-light", "text-dark");
+    body.classList.add("bg-dark", "text-light");
+
+    contenedor.classList.remove("bg-white", "text-dark");
+    contenedor.classList.add("bg-secondary", "text-light");
+
+    btnTema.classList.remove("btn-outline-dark");
+    btnTema.classList.add("btn-outline-light");
+    btnTema.textContent = "☀️ Modo claro";
+  } else {
+    body.classList.remove("bg-dark", "text-light");
+    body.classList.add("bg-light", "text-dark");
+
+    contenedor.classList.remove("bg-secondary", "text-light");
+    contenedor.classList.add("bg-white", "text-dark");
+
+    btnTema.classList.remove("btn-outline-light");
+    btnTema.classList.add("btn-outline-dark");
+    btnTema.textContent = "🌗 Modo oscuro";
+  }
+}
+
