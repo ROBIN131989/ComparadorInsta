@@ -117,4 +117,11 @@ function ordenarResultados() {
 // 🔹 Buscar dentro de resultados
 function buscarResultado() {
   let query = document.getElementById("buscador").value.toLowerCase();
-  let filtr
+  let filtrados = resultadoGlobal.filter(u => u.toLowerCase().includes(query));
+  mostrarResultados(filtrados);
+}
+
+// 🔹 Cambiar tema con persistencia en localStorage
+function cambiarTema() {
+  let body = document.getElementById("body");
+  let contenedor = document.getElementById("
