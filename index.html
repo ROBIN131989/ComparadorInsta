@@ -50,12 +50,12 @@
     </div>
 
     <!-- Botones principales -->
-    <form onsubmit="comparar(); return false;" class="mb-3">
-      <button type="submit" class="btn btn-primary me-2">Comparar</button>
+    <div class="mb-3">
+      <button type="button" class="btn btn-primary me-2" onclick="comparar()">Comparar</button>
       <button type="button" class="btn btn-success me-2" onclick="exportarResultado()">Exportar</button>
       <button type="button" class="btn btn-secondary me-2" onclick="copiarResultado()">Copiar resultados</button>
       <button type="button" class="btn btn-info me-2" onclick="ordenarResultados()">Ordenar A-Z</button>
-    </form>
+    </div>
 
     <!-- Buscador -->
     <div class="mb-3">
@@ -73,7 +73,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
